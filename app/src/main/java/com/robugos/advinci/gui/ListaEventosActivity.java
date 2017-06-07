@@ -138,7 +138,7 @@ public class ListaEventosActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
             adapter = new ListViewAdapter(ListaEventosActivity.this, listaEventos);
-            removeAntigos(21600);
+            //removeAntigos(311040000);
             sortListByData();
             lView.setAdapter(adapter);
             lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
