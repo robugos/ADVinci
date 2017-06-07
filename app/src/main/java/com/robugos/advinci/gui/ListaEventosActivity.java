@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ListaEventosActivity extends AppCompatActivity {
 
@@ -136,8 +137,8 @@ public class ListaEventosActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (pDialog.isShowing())
                 pDialog.dismiss();
-
             adapter = new ListViewAdapter(ListaEventosActivity.this, listaEventos);
+            removeAntigos(21600);
             sortListByData();
             lView.setAdapter(adapter);
             lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,6 +159,16 @@ public class ListaEventosActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    private void removeAntigos(int tolerancia) {
+        Date hoje = new Date(System.currentTimeMillis() - tolerancia * 1000);
+        for (Iterator<HashMap<String,String>> iterator = listaEventos.iterator(); iterator.hasNext(); ) {
+            HashMap<String,String> evento = iterator.next();
+            if(stringToDate(evento.get("data")).before(hoje)){
+                iterator.remove();
+            }
+        }
     }
 
     @Override
@@ -264,10 +275,8 @@ public class ListaEventosActivity extends AppCompatActivity {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(convertedDate);
         return convertedDate;
     }
-
     /*@Override
     public void onBackPressed(){
         moveTaskToBack(true);
