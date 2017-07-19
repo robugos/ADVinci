@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
-import com.robugos.advinci.dominio.Evento;
 import com.robugos.advinci.dominio.ListViewAdapter;
 
 import org.json.JSONArray;
@@ -92,7 +91,6 @@ public class ListaEventosActivity extends AppCompatActivity {
                         String urlimg = eve.getString("urlimg");
                         String adimg = eve.getString("adimg");
                         String nota = eve.getString("nota");
-                        String descricao = eve.getString("descricao");
 
                         //hashmap temporario
                         HashMap<String, String> evento = new HashMap<>();
@@ -103,7 +101,6 @@ public class ListaEventosActivity extends AppCompatActivity {
                         evento.put("urlimg", urlimg);
                         evento.put("adimg", adimg);
                         evento.put("nota", nota);
-                        evento.put("descricao", descricao);
 
 
                         listaEventos.add(evento);
@@ -143,17 +140,8 @@ public class ListaEventosActivity extends AppCompatActivity {
             lView.setAdapter(adapter);
             lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Evento evento = new Evento(listaEventos.get(position).get("nome"),
-                            listaEventos.get(position).get("local"),
-                            listaEventos.get(position).get("data"),
-                            listaEventos.get(position).get("descricao"),
-                            listaEventos.get(position).get("urlimg"),
-                            listaEventos.get(position).get("adimg"),
-                            listaEventos.get(position).get("nota"));
                     Intent intent = new Intent(ListaEventosActivity.this, EventoActivity.class);
-                    //intent.putExtra("evento", listaEventos.get(position).get("id"));
-                    //intent.putExtra("evento", listaEventos.get(position).get("nome"));
-                    intent.putExtra("evento", evento.toString());
+                    intent.putExtra("id", listaEventos.get(position).get("id"));
                     startActivity(intent);
                 }
             });
@@ -228,8 +216,8 @@ public class ListaEventosActivity extends AppCompatActivity {
         Collections.sort(listaEventos, new Comparator<HashMap< String,String >>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                Date data1 = stringToDate(lhs.get("data").toString());
-                Date data2 = stringToDate(rhs.get("data").toString());
+                Date data1 = stringToDate(lhs.get("data"));
+                Date data2 = stringToDate(rhs.get("data"));
                 if(null != lhs.get("data") && null != rhs.get("data")){
                     return data1.compareTo(data2);
                 }else if(null != lhs.get("data")){
@@ -263,8 +251,8 @@ public class ListaEventosActivity extends AppCompatActivity {
     public Date stringToDate(String data){
         String dia = data.substring(0,11);
         String hora = data.substring(14,16)+":"+data.substring(17,19);
-        System.out.println(dia);
-        System.out.println(hora);
+        //System.out.println(dia);
+        //System.out.println(hora);
         data = dia+hora;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         Date convertedDate = new Date();

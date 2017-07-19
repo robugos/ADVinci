@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Evento implements Serializable {
     private static final long serialVersionUID = 1L;
+    private String id;
     private String nome;
     private String local;
     private String data;
@@ -16,7 +17,19 @@ public class Evento implements Serializable {
     private String adimg;
     private String nota;
 
-    public Evento(String nome, String local, String data, String descricao, String urlimg, String adimg, String nota){
+    public Evento(String id, String nome, String local, String data, String descricao, String urlimg, String adimg, String nota){
+        setId(id);
+        setNome(nome);
+        setLocal(local);
+        setData(data);
+        setDescricao(descricao);
+        setUrlimg(urlimg);
+        setAdimg(adimg);
+        setNota(nota);
+    }
+
+    public Evento(String id, String nome, String local, String data, String nota){
+        setId(id);
         setNome(nome);
         setLocal(local);
         setData(data);
@@ -27,19 +40,28 @@ public class Evento implements Serializable {
     }
     public Evento(String string){
         String[] evento = string.split(";");
-        setNome(evento[0]);
-        setLocal(evento[1]);
-        setData(evento[2]);
-        setDescricao(evento[3]);
-        setUrlimg(evento[4]);
-        setAdimg(evento[5]);
-        setNota(evento[6]);
+        setId(evento[0]);
+        setNome(evento[1]);
+        setLocal(evento[2]);
+        setData(evento[3]);
+        setDescricao(evento[4]);
+        setUrlimg(evento[5]);
+        setAdimg(evento[6]);
+        setNota(evento[7]);
     }
 
 
     @Override
     public String toString() {
-        return this.nome+";"+this.local+";"+this.data+";"+this.descricao+";"+this.urlimg+";"+this.adimg+";"+this.nota;
+        return this.id+";"+this.nome+";"+this.local+";"+this.data+";"+this.descricao+";"+this.urlimg+";"+this.adimg+";"+this.nota;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNome() {
