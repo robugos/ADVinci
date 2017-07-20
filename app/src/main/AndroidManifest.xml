@@ -20,7 +20,7 @@
         <activity
             android:name=".gui.MainActivity"
             android:configChanges="screenSize|keyboardHidden"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".gui.ListaEventosActivity"
             android:label="@string/title_listaeventos"
@@ -53,9 +53,16 @@
         <activity android:name=".gui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".gui.InteressesActivity"
+            android:label="@string/title_activity_interesses"
+            android:parentActivityName=".gui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".gui.MainActivity" />
         </activity>
     </application>
 
