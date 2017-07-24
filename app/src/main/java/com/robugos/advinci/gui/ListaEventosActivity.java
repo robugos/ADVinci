@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class ListaEventosActivity extends AppCompatActivity {
 
@@ -149,7 +148,7 @@ public class ListaEventosActivity extends AppCompatActivity {
 
     }
 
-    private void removeAntigos(int tolerancia) {
+    /*private void removeAntigos(int tolerancia) {
         Date hoje = new Date(System.currentTimeMillis() - tolerancia * 1000);
         for (Iterator<HashMap<String,String>> iterator = listaEventos.iterator(); iterator.hasNext(); ) {
             HashMap<String,String> evento = iterator.next();
@@ -157,7 +156,7 @@ public class ListaEventosActivity extends AppCompatActivity {
                 iterator.remove();
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
