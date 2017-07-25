@@ -62,15 +62,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*Button btnAjustes = (Button) findViewById(R.id.button_config);
-        btnAjustes.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(),
-                        "Exibe o menu de configuração do app", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         Button btnPerfil = (Button) findViewById(R.id.button_perfil);
         btnPerfil.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -87,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verInteresses(View view){
-        Intent intent = new Intent(this, InteressesActivity.class);
+        Intent intent = new Intent(this, ListaInteressesActivity.class);
+        //intent.putExtra("interesses", interesses);
         startActivity(intent);
     }
 

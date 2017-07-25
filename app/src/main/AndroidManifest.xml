@@ -53,11 +53,11 @@
         <activity android:name=".gui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".gui.InteressesActivity"
+        <activity android:name=".gui.ListaInteressesActivity"
             android:label="@string/title_activity_interesses"
             android:parentActivityName=".gui.MainActivity">
             <meta-data
