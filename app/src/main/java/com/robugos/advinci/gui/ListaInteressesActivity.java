@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private static String url = "http://robugos.com/advinci/db/listainteresses.php?uid=";
     private String idUser;
+    private String[] userInteresses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,20 +116,29 @@ public class ListaInteressesActivity extends AppCompatActivity {
                     int id = cb.getId();
                     if (checkselect[id]){
                         cb.setChecked(false);
+                        holder.checkInteresse.setChecked(false);
                         checkselect[id] = false;
                     }else{
                         cb.setChecked(true);
+                        holder.checkInteresse.setChecked(true);
                         checkselect[id] = true;
                     }
                 }
             });
-            String interesse[] = new String[3];
+            String interesse[];
             interesse = itens.get(position).split(";");
             holder.idInteresse.setVisibility(View.GONE);
             holder.idInteresse.setText(interesse[0]);
             holder.checkInteresse.setText(interesse[1]);
-            holder.checkInteresse.setChecked(checkselect[position]);
+            if (Arrays.asList(userInteresses).contains(interesse[0])){
+                holder.checkInteresse.setChecked(true);
+                checkselect[holder.checkInteresse.getId()] = true;
+            }else{
+                holder.checkInteresse.setChecked(checkselect[position]);
+                checkselect[holder.checkInteresse.getId()] = false;
+            }
             holder.id = position;
+            //holder.checkInteresse.setChecked(checkselect[position]);
             return convertView;
         }
     }
@@ -143,6 +154,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
             final ArrayList<Integer> posSel = new ArrayList<Integer>();
             posSel.clear();
             listaInteresses.clear();
+            listaInteresses.addAll(Arrays.asList(userInteresses));
             boolean noSel = false;
             for (int i =0; i < checkselect.length; i++){
                 if (checkselect[i] == true) {
@@ -156,9 +168,8 @@ public class ListaInteressesActivity extends AppCompatActivity {
             if (!noSel){
                 Toast.makeText(ListaInteressesActivity.this, "Selecione ao menos um interesse", Toast.LENGTH_SHORT).show();
             }else{
-                //Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+posSel.toString(), Toast.LENGTH_LONG).show();
                 saveInterests(listaInteresses.toString());
-                //Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+listaInteresses.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+listaInteresses.toString(), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -168,7 +179,6 @@ public class ListaInteressesActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //Mostra dialog de progresso
             pDialog = new ProgressDialog(ListaInteressesActivity.this);
             pDialog.setMessage("Aguarde");
             pDialog.setCancelable(false);
@@ -178,15 +188,12 @@ public class ListaInteressesActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0){
             HttpHandler sh = new HttpHandler();
-            // Faz request a URL e pega a resposta
             String jsonStr = sh.chamaServico(url+idUser);
             Log.e(TAG, "Respotas da URL: " + jsonStr);
             if (jsonStr != null){
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
-                    //Pega Array node do JSON
                     JSONArray interesses = jsonObj.getJSONArray("interesses");
-                    //loop de todos os eventos
                     for (int i = 0; i < interesses.length(); i++){
                         JSONObject interest = interesses.getJSONObject(i);
                         String id = interest.getString("id");
@@ -197,8 +204,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
                     }
                     String valores = jsonObj.getString("userinteresses");
                     valores = valores.substring(1, valores.length()-1).replaceAll(" ","");
-                    String[] parts = valores.split(",");
-                    //Collections.addAll(userinteresses, parts);
+                    userInteresses = valores.split(",");
 
                 } catch (final JSONException e){
                     Log.e(TAG, "Erro do JSON parsing: " + e.getMessage());
@@ -253,14 +259,12 @@ public class ListaInteressesActivity extends AppCompatActivity {
     }
 
     private void saveInterests(final String interesses) {
-        // Tag used to cancel the request
         String tag_string_req = "req_register";
 
         pDialog.setMessage("Salvando interesses");
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST, "http://robugos.com/advinci/db/update.php", new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Update Response: " + response.toString());
@@ -301,7 +305,6 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
         };
 
-        // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
