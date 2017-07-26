@@ -4,6 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <!--<TextView
+        android:id="@+id/texto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Selecione um ou mais tópicos que sejam de seu interesse para uma melhor recomendação de eventos."
+        android:textAlignment="center" />-->
+
     <ListView
         android:id="@+id/listaInteresses"
         android:layout_width="match_parent"

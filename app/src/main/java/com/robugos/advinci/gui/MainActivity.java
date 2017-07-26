@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteHandler db;
     private SessionManager session;
+    private String idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         final String nome = user.get("nome");
         final String email = user.get("email");
+        idUser = user.get("uid");
         Button perfilText = (Button) findViewById(R.id.button_perfil);
         perfilText.setText(nome);
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void verInteresses(View view){
         Intent intent = new Intent(this, ListaInteressesActivity.class);
-        //intent.putExtra("interesses", interesses);
+        intent.putExtra("uid", idUser);
         startActivity(intent);
     }
 
