@@ -8,12 +8,23 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcon">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>-->
-    <color name="colorPrimary">#1976d2</color>
+    <!--NEWCOLORSOLD-->
+    <!--<color name="colorPrimary">#1976d2</color>
     <color name="colorPrimaryDark">#004ba0</color>
     <color name="colorPrimaryLight">#63a4ff</color>
     <color name="colorAccent">#bf360c</color>
     <color name="colorAccentLight">#f9683a</color>
     <color name="colorAccentDark">#870000</color>
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorSecondaryText">#ffffff</color>
+    <color name="colorIcon">#FFFFFF</color>
+    <color name="colorDivider">#BDBDBD</color>-->
+    <color name="colorPrimary">#7168B7</color>
+    <color name="colorPrimaryDark">#39325E</color>
+    <color name="colorPrimaryLight">#968EC9</color>
+    <color name="colorAccent">#379B91</color>
+    <color name="colorAccentLight">#00D6BE</color>
+    <color name="colorAccentDark">#379B91</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorSecondaryText">#ffffff</color>
     <color name="colorIcon">#FFFFFF</color>

@@ -2,9 +2,12 @@ package com.robugos.advinci.gui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,6 +16,7 @@ import com.robugos.advinci.R;
 import com.robugos.advinci.dao.SQLiteHandler;
 import com.robugos.advinci.dao.SessionManager;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,11 +46,24 @@ public class MainActivity extends AppCompatActivity {
         final String nome = user.get("nome");
         final String email = user.get("email");
         idUser = user.get("uid");
-        Button perfilText = (Button) findViewById(R.id.button_perfil);
-        perfilText.setText(nome);
+        /*TextView perfilText = (TextView) findViewById(R.id.welcome_user);
+        perfilText.setText(mensagemBoasVindas()+", "+nome+"!");*/
+        setTitle(mensagemBoasVindas()+", "+nome+"!");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Dosis-Bold.ttf");
+
 
 
         Button btnHistorico = (Button) findViewById(R.id.button_historico);
+        Button btnProgramacao = (Button) findViewById(R.id.button_programacao);
+        Button btnConfig = (Button) findViewById(R.id.button_config);
+        Button btnPerfil = (Button) findViewById(R.id.button_perfil);
+
+        btnHistorico.setTypeface(typeface);
+        btnProgramacao.setTypeface(typeface);
+        btnConfig.setTypeface(typeface);
+        btnPerfil.setTypeface(typeface);
+
+
         btnHistorico.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -55,23 +72,62 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnOuvirAD = (Button) findViewById(R.id.button_ad);
+        /*Button btnOuvirAD = (Button) findViewById(R.id.button_ad);
         btnOuvirAD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(getApplicationContext(),
                         "Busca redes para transmissão de AD", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
-        Button btnPerfil = (Button) findViewById(R.id.button_perfil);
+        /*Button btnPerfil = (Button) findViewById(R.id.button_perfil);
         btnPerfil.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 //Toast.makeText(getApplicationContext(), "Exibe o perfil de "+email, Toast.LENGTH_SHORT).show();
                 logoutUser();
             }
-        });
+        });*/
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                logoutUser();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    public String mensagemBoasVindas(){
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+        String msg = "";
+        if(timeOfDay >= 0 && timeOfDay < 12){
+            msg = "Bom dia";
+        }else if(timeOfDay >= 12 && timeOfDay < 16){
+            msg = "Boa tarde";
+        }else if(timeOfDay >= 16 && timeOfDay < 24) {
+            msg = "Boa noite";
+        }
+
+        return msg;
     }
 
     public void verProgramacao(View view){

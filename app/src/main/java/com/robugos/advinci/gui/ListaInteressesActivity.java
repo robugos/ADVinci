@@ -2,39 +2,27 @@ package com.robugos.advinci.gui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
-import com.robugos.advinci.dominio.AppController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ListaInteressesActivity extends AppCompatActivity {
 
@@ -45,20 +33,14 @@ public class ListaInteressesActivity extends AppCompatActivity {
     private ArrayList<String> listaInteresses = new ArrayList<String>();
     private String TAG = ListaInteressesActivity.class.getSimpleName();
     private ProgressDialog pDialog;
-    private static String url = "http://robugos.com/advinci/db/listainteresses.php?uid=";
-    private String idUser;
-    private String[] userInteresses;
+    private static String url = "http://robugos.com/advinci/db/listainteresses.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interesses);
 
-        Intent intent = getIntent();
-        idUser = intent.getExtras().getString("uid");
         itens.clear();
-        final Button saveButton = (Button) findViewById(R.id.saveInterests);
-
         new GetInteresses().execute();
     }
 
@@ -116,29 +98,20 @@ public class ListaInteressesActivity extends AppCompatActivity {
                     int id = cb.getId();
                     if (checkselect[id]){
                         cb.setChecked(false);
-                        holder.checkInteresse.setChecked(false);
                         checkselect[id] = false;
                     }else{
                         cb.setChecked(true);
-                        holder.checkInteresse.setChecked(true);
                         checkselect[id] = true;
                     }
                 }
             });
-            String interesse[];
+            String interesse[] = new String[3];
             interesse = itens.get(position).split(";");
             holder.idInteresse.setVisibility(View.GONE);
             holder.idInteresse.setText(interesse[0]);
             holder.checkInteresse.setText(interesse[1]);
-            if (Arrays.asList(userInteresses).contains(interesse[0])){
-                holder.checkInteresse.setChecked(true);
-                checkselect[holder.checkInteresse.getId()] = true;
-            }else{
-                holder.checkInteresse.setChecked(checkselect[position]);
-                checkselect[holder.checkInteresse.getId()] = false;
-            }
+            holder.checkInteresse.setChecked(checkselect[position]);
             holder.id = position;
-            //holder.checkInteresse.setChecked(checkselect[position]);
             return convertView;
         }
     }
@@ -154,7 +127,6 @@ public class ListaInteressesActivity extends AppCompatActivity {
             final ArrayList<Integer> posSel = new ArrayList<Integer>();
             posSel.clear();
             listaInteresses.clear();
-            listaInteresses.addAll(Arrays.asList(userInteresses));
             boolean noSel = false;
             for (int i =0; i < checkselect.length; i++){
                 if (checkselect[i] == true) {
@@ -168,7 +140,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
             if (!noSel){
                 Toast.makeText(ListaInteressesActivity.this, "Selecione ao menos um interesse", Toast.LENGTH_SHORT).show();
             }else{
-                saveInterests(listaInteresses.toString());
+                //Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+posSel.toString(), Toast.LENGTH_LONG).show();
                 Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+listaInteresses.toString(), Toast.LENGTH_LONG).show();
             }
         }
@@ -179,6 +151,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            //Mostra dialog de progresso
             pDialog = new ProgressDialog(ListaInteressesActivity.this);
             pDialog.setMessage("Aguarde");
             pDialog.setCancelable(false);
@@ -188,12 +161,15 @@ public class ListaInteressesActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0){
             HttpHandler sh = new HttpHandler();
-            String jsonStr = sh.chamaServico(url+idUser);
+            // Faz request a URL e pega a resposta
+            String jsonStr = sh.chamaServico(url);
             Log.e(TAG, "Respotas da URL: " + jsonStr);
             if (jsonStr != null){
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
+                    //Pega Array node do JSON
                     JSONArray interesses = jsonObj.getJSONArray("interesses");
+                    //loop de todos os eventos
                     for (int i = 0; i < interesses.length(); i++){
                         JSONObject interest = interesses.getJSONObject(i);
                         String id = interest.getString("id");
@@ -202,15 +178,14 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
                         itens.add(id+";"+nome+";"+categoria);
                     }
-                    String valores = jsonObj.getString("userinteresses");
-                    valores = valores.substring(1, valores.length()-1).replaceAll(" ","");
-                    userInteresses = valores.split(",");
-
                 } catch (final JSONException e){
                     Log.e(TAG, "Erro do JSON parsing: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Erro: " + e.getMessage(), Toast.LENGTH_LONG)
+                                    .show();
                         }
                     });
                 }
@@ -218,7 +193,10 @@ public class ListaInteressesActivity extends AppCompatActivity {
                 Log.e(TAG, "Sem conexão");
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {Toast.makeText(getApplicationContext(),"Não foi possível conectar com o servidor", Toast.LENGTH_LONG).show();
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Sem conexão", Toast.LENGTH_LONG)
+                                .show();
                     }
                 });
             }
@@ -233,88 +211,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
             checkselect = new boolean[count];
             listview = (ListView) findViewById(R.id.listaInteresses);
             listview.setAdapter(new InteresseAdapter(ListaInteressesActivity.this));
-            showAviso();
         }
 
-    }
-
-    private void showAviso() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Selecionar interesses")
-                .setMessage("Selecione um ou mais tópicos que sejam de seu interesse para uma melhor recomendação de eventos")
-                .setIcon(0)
-                .setPositiveButton("Continuar", null)
-                .setNegativeButton("Voltar", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(ListaInteressesActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                })
-                .show();
-    }
-
-    private void saveInterests(final String interesses) {
-        String tag_string_req = "req_register";
-
-        pDialog.setMessage("Salvando interesses");
-        showDialog();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST, "http://robugos.com/advinci/db/update.php", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Update Response: " + response.toString());
-                hideDialog();
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        Toast.makeText(getApplicationContext(), "Interesses salvos.", Toast.LENGTH_LONG).show();
-                    } else {
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("uid", idUser);
-                params.put("interesses", interesses);
-                return params;
-            }
-
-        };
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
     }
 }

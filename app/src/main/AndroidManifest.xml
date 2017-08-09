@@ -17,10 +17,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".gui.MainActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".gui.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".gui.CreateUserActivity"
+            android:parentActivityName=".gui.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".gui.LoginActivity" />
+        </activity>
+
+        <activity
+            android:name=".gui.ForgotPassActivity"
+            android:parentActivityName=".gui.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".gui.LoginActivity" />
+        </activity>
+
         <activity
             android:name=".gui.ListaEventosActivity"
             android:label="@string/title_listaeventos"
@@ -29,6 +55,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.MainActivity" />
         </activity>
+
         <activity
             android:name=".gui.EventoActivity"
             android:label="@string/title_evento">
@@ -36,34 +63,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.ListaEventosActivity" />
         </activity>
-        <activity
-            android:name=".gui.CreateUserActivity"
-            android:parentActivityName=".gui.LoginActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.LoginActivity" />
-        </activity>
-        <activity
-            android:name=".gui.ForgotPassActivity"
-            android:parentActivityName=".gui.LoginActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.LoginActivity" />
-        </activity>
-        <activity android:name=".gui.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".gui.ListaInteressesActivity"
+        <activity
+            android:name=".gui.ListaInteressesActivity"
             android:label="@string/title_activity_interesses"
             android:parentActivityName=".gui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".gui.SplashScreen"
+            android:theme="@style/AppCompat.TelaCheia" />
     </application>
 
 </manifest>

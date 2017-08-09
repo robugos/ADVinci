@@ -17,5 +17,4 @@
     <item android:id="@+id/action_order_data"
         android:title="Ordenar por data"
         app:showAsAction="never"/>
-
 </menu>
