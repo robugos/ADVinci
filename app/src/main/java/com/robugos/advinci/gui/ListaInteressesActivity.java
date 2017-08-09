@@ -1,149 +1,56 @@
 package com.robugos.advinci.gui;
 
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
+import com.robugos.advinci.dominio.AppController;
+import com.robugos.advinci.dominio.CustomAdapter;
+import com.robugos.advinci.dominio.DataModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ListaInteressesActivity extends AppCompatActivity {
 
-    private ListView listview;
-    static ArrayList<String> itens = new ArrayList<String>();
-    private int count;
-    private boolean[] checkselect;
-    private ArrayList<String> listaInteresses = new ArrayList<String>();
+    ArrayList<DataModel> dataModels;
+    ListView listView;
+    private CustomAdapter adapter;
     private String TAG = ListaInteressesActivity.class.getSimpleName();
     private ProgressDialog pDialog;
-    private static String url = "http://robugos.com/advinci/db/listainteresses.php";
+    private static String url = "http://robugos.com/advinci/db/listainteresses.php?uid=";
+    private static String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interesses);
 
-        itens.clear();
+        listView = (ListView) findViewById(R.id.listaInteresses);
+        dataModels = new ArrayList<>();
+        Intent intent = getIntent();
+        userId = intent.getExtras().getString("uid");
         new GetInteresses().execute();
-    }
 
-    public class InteresseAdapter extends BaseAdapter{
-        private LayoutInflater intInflater;
-        private Context intContext;
-        public InteresseAdapter(Context context){
-            intContext = context;
-        }
-
-        public  int getCount(){
-            return count;
-        }
-
-        public Object getItem(int position){
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final ViewHolder holder;
-            if (convertView == null){
-                holder = new ViewHolder();
-                convertView = LayoutInflater.from(intContext).inflate(R.layout.listview_interesses, null);
-                holder.idInteresse = (TextView) convertView.findViewById(R.id.idInteresse);
-                holder.checkInteresse = (CheckBox) convertView.findViewById(R.id.checkInteresse);
-                convertView.setTag(holder);
-                convertView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        int id = holder.checkInteresse.getId();
-                        if (checkselect[id]){
-                            holder.checkInteresse.setChecked(false);
-                            checkselect[id] = false;
-                        }else{
-                            holder.checkInteresse.setChecked(true);
-                            checkselect[id] = true;
-                        }
-
-                    }
-                });
-            }else{
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.idInteresse.setId(position);
-            holder.checkInteresse.setId(position);
-            holder.checkInteresse.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CheckBox cb = (CheckBox) v;
-                    int id = cb.getId();
-                    if (checkselect[id]){
-                        cb.setChecked(false);
-                        checkselect[id] = false;
-                    }else{
-                        cb.setChecked(true);
-                        checkselect[id] = true;
-                    }
-                }
-            });
-            String interesse[] = new String[3];
-            interesse = itens.get(position).split(";");
-            holder.idInteresse.setVisibility(View.GONE);
-            holder.idInteresse.setText(interesse[0]);
-            holder.checkInteresse.setText(interesse[1]);
-            holder.checkInteresse.setChecked(checkselect[position]);
-            holder.id = position;
-            return convertView;
-        }
-    }
-
-    class ViewHolder {
-        TextView idInteresse;
-        CheckBox checkInteresse;
-        int id;
-    }
-
-    public void click(View v){
-        if (v.getId() == R.id.saveInterests) {
-            final ArrayList<Integer> posSel = new ArrayList<Integer>();
-            posSel.clear();
-            listaInteresses.clear();
-            boolean noSel = false;
-            for (int i =0; i < checkselect.length; i++){
-                if (checkselect[i] == true) {
-                    noSel = true;
-                    Log.e("sel pos thu -->", "" + i);
-                    String[] interesse = itens.get(i).split(";");
-                    listaInteresses.add(interesse[0]);
-                    posSel.add(i);
-                }
-            }
-            if (!noSel){
-                Toast.makeText(ListaInteressesActivity.this, "Selecione ao menos um interesse", Toast.LENGTH_SHORT).show();
-            }else{
-                //Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+posSel.toString(), Toast.LENGTH_LONG).show();
-                Toast.makeText(ListaInteressesActivity.this, "Selecionados: "+listaInteresses.toString(), Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     //Classe AsyncTask para pegar jSON chamando HTTP
@@ -160,9 +67,12 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0){
+            ArrayList<String> itens = new ArrayList<>();
+            String[] parts = {};
+            //userId = "592dd7705cf739.39476295";
             HttpHandler sh = new HttpHandler();
             // Faz request a URL e pega a resposta
-            String jsonStr = sh.chamaServico(url);
+            String jsonStr = sh.chamaServico(url+userId);
             Log.e(TAG, "Respotas da URL: " + jsonStr);
             if (jsonStr != null){
                 try {
@@ -178,14 +88,15 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
                         itens.add(id+";"+nome+";"+categoria);
                     }
+                    String valores = jsonObj.getString("userinteresses");
+                    valores = valores.substring(1, valores.length()-1).replaceAll(" ","");
+                    parts = valores.split(",");
+
                 } catch (final JSONException e){
                     Log.e(TAG, "Erro do JSON parsing: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Erro: " + e.getMessage(), Toast.LENGTH_LONG)
-                                    .show();
+                        public void run() {Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -193,25 +104,139 @@ public class ListaInteressesActivity extends AppCompatActivity {
                 Log.e(TAG, "Sem conexão");
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Sem conexão", Toast.LENGTH_LONG)
-                                .show();
+                    public void run() {Toast.makeText(getApplicationContext(),"Não foi possível conectar com o servidor", Toast.LENGTH_LONG).show();
                     }
                 });
             }
+            for (int j = 0; j < parts.length; j++) {
+                for (int i = 0; i < itens.size(); i++) {
+                    String[] item;
+                    item = itens.get(i).split(";");
+                    DataModel model = getDataModel(dataModels, item[1]);
+                    if (model==null){
+                        if (item[0].equals(parts[j])){
+                            dataModels.add(new DataModel(Integer.parseInt(item[0]), item[1], true));
+                        }else{
+                            dataModels.add(new DataModel(Integer.parseInt(item[0]), item[1], false));
+                        }
+                    }else{
+                        if (item[0].equals(parts[j])){
+                            model.setStatus(true);
+                        }/*else{
+                            //listaInteresses.remove(listaInteresses.indexOf(model.getIdString()));
+                        }*/
+                    }
+                }
+            }
             return null;
         }
+
+        public DataModel getDataModel(ArrayList<DataModel> dataSet, String interesse) {
+            for (DataModel item : dataSet) {
+                if (item.getNome().equals(interesse)) {
+                    return item;
+                }
+            }
+            return null;
+        }
+
         @Override
-        protected  void onPostExecute(Void result){
+        protected  void onPostExecute(Void result) {
             super.onPostExecute(result);
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            count = itens.size();
-            checkselect = new boolean[count];
-            listview = (ListView) findViewById(R.id.listaInteresses);
-            listview.setAdapter(new InteresseAdapter(ListaInteressesActivity.this));
-        }
+            adapter = new CustomAdapter(dataModels, getApplicationContext());
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    DataModel dataModel = dataModels.get(position);
+                    if (dataModel.getStatus()!=true){
+                        dataModel.setStatus(true);
+                    }else
+                        dataModel.setStatus(false);
+                    adapter.notifyDataSetChanged();
+                    //Toast.makeText(ListaInteressesActivity.this, getInteresses(dataModels, true).toString(), Toast.LENGTH_SHORT).show();
+
+
+                }
+            });
+        }
+    }
+
+    public List<String> getInteresses(ArrayList<DataModel> dataSet, boolean status) {
+        List<String> interesses = new ArrayList<>();
+        for (DataModel item : dataSet) {
+            if (item.getStatus()==status) {
+                interesses.add(item.getIdString());
+            }
+        }
+        return interesses;
+    }
+
+    public void saveInteresses(View view){
+        if (getInteresses(dataModels, true).isEmpty()){
+            Toast.makeText(ListaInteressesActivity.this, "Selecione pelo menos um interesse", Toast.LENGTH_SHORT).show();
+        }else{
+            //Toast.makeText(ListaInteressesActivity.this, getInteresses(dataModels, true).toString(), Toast.LENGTH_SHORT).show();
+            String tag_string_req = "req_register";
+
+            pDialog.setMessage("Aguarde");
+            showDialog();
+
+            StringRequest strReq = new StringRequest(Request.Method.POST, "http://robugos.com/advinci/db/update.php", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "Update Response: " + response.toString());
+                    hideDialog();
+
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean("error");
+                        if (!error) {
+                            Toast.makeText(getApplicationContext(), "Interesses salvos", Toast.LENGTH_LONG).show();
+                        } else {
+                            String errorMsg = jObj.getString("error_msg");
+                            Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Registration Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    hideDialog();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("uid", userId);
+                    params.put("interesses", getInteresses(dataModels, true).toString());
+                    return params;
+                }
+
+            };
+
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

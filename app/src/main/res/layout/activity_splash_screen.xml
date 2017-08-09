@@ -20,5 +20,14 @@
         android:gravity="center"
         android:text="ADVinci"
         android:textColor="#fff"
-        android:textSize="30dp" />
+        android:textSize="36dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="by robugos"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:layout_gravity="center"/>
 </LinearLayout>

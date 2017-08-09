@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.SQLiteHandler;
@@ -64,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
         btnPerfil.setTypeface(typeface);
 
 
-        btnHistorico.setOnClickListener(new View.OnClickListener(){
+        /*btnHistorico.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(getApplicationContext(),
                         "Exibe o histórico de eventos", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         /*Button btnOuvirAD = (Button) findViewById(R.id.button_ad);
         btnOuvirAD.setOnClickListener(new View.OnClickListener(){
@@ -132,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void verProgramacao(View view){
         Intent intent = new Intent(this, ListaEventosActivity.class);
+        startActivity(intent);
+    }
+
+    public void verSplash(View view){
+        Intent intent = new Intent(this, SplashScreen.class);
         startActivity(intent);
     }
 
