@@ -28,7 +28,7 @@
 
     <RatingBar
         android:id="@+id/ratingEvento"
-        style = "?android:attr/ratingBarStyleSmall"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"

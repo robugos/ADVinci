@@ -50,46 +50,15 @@ public class MainActivity extends AppCompatActivity {
         setTitle(mensagemBoasVindas()+", "+nome+"!");
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Dosis-Bold.ttf");
 
-
-
-        Button btnHistorico = (Button) findViewById(R.id.button_historico);
-        Button btnProgramacao = (Button) findViewById(R.id.button_programacao);
-        Button btnConfig = (Button) findViewById(R.id.button_config);
         Button btnPerfil = (Button) findViewById(R.id.button_perfil);
+        //Button btnProgramacao = (Button) findViewById(R.id.button_programacao);
+        //Button btnHistorico = (Button) findViewById(R.id.button_historico);
+        //Button btnConfig = (Button) findViewById(R.id.button_config);
 
-        btnHistorico.setTypeface(typeface);
-        btnProgramacao.setTypeface(typeface);
-        btnConfig.setTypeface(typeface);
         btnPerfil.setTypeface(typeface);
-
-
-        /*btnHistorico.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(),
-                        "Exibe o histórico de eventos", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        /*Button btnOuvirAD = (Button) findViewById(R.id.button_ad);
-        btnOuvirAD.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(),
-                        "Busca redes para transmissão de AD", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        /*Button btnPerfil = (Button) findViewById(R.id.button_perfil);
-        btnPerfil.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //Toast.makeText(getApplicationContext(), "Exibe o perfil de "+email, Toast.LENGTH_SHORT).show();
-                logoutUser();
-            }
-        });*/
-
-
+        //btnProgramacao.setTypeface(typeface);
+        //btnHistorico.setTypeface(typeface);
+        //btnConfig.setTypeface(typeface);
     }
 
     @Override
@@ -130,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verProgramacao(View view){
-        Intent intent = new Intent(this, ListaEventosActivity.class);
+        //Intent intent = new Intent(this, ListaEventosActivity.class);
+        Intent intent = new Intent(this, ProgramacaoActivity.class);
         startActivity(intent);
     }
 

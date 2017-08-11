@@ -22,30 +22,27 @@
             android:configChanges="screenSize|keyboardHidden"
             android:label="@string/app_name" />
         <activity android:name=".gui.LoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
-            android:name=".gui.CreateUserActivity"
-            android:parentActivityName=".gui.LoginActivity">
+            android:name=".gui.CreateUserActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.LoginActivity" />
         </activity>
         <activity
-            android:name=".gui.ForgotPassActivity"
-            android:parentActivityName=".gui.LoginActivity">
+            android:name=".gui.ForgotPassActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.LoginActivity" />
         </activity>
         <activity
             android:name=".gui.ListaEventosActivity"
-            android:label="@string/title_listaeventos"
-            android:parentActivityName=".gui.MainActivity">
+            android:label="@string/title_listaeventos">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.MainActivity" />
@@ -59,16 +56,21 @@
         </activity>
         <activity
             android:name=".gui.ListaInteressesActivity"
-            android:label="@string/title_activity_interesses"
-            android:parentActivityName=".gui.MainActivity">
+            android:label="@string/title_activity_interesses">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.MainActivity" />
         </activity>
         <activity
             android:name=".gui.SplashScreen"
-            android:theme="@style/AppCompat.TelaCheia">
-
+            android:theme="@style/AppCompat.TelaCheia" />
+        <activity
+            android:name=".gui.ProgramacaoActivity"
+            android:label="@string/title_activity_programacao"
+            android:theme="@style/WithoutShadow">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".gui.MainActivity" />
         </activity>
     </application>
 

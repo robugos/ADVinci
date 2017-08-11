@@ -62,7 +62,7 @@
 
             <RatingBar
                 android:id="@+id/ratingEvento"
-                style="?android:attr/ratingBarStyleIndicator"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
