@@ -2,19 +2,19 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true" >
         <shape>
-            <solid android:color="@color/colorAccent"></solid>
+            <solid android:color="@color/colorAccentLight"></solid>
         </shape>
     </item>
 
     <item android:state_focused="true" >
         <shape>
-            <solid android:color="@color/colorAccentLight"></solid>
+            <solid android:color="@color/colorAccentLighter"></solid>
         </shape>
     </item>
 
     <item>
         <shape>
-            <solid android:color="@color/colorAccentLight"></solid>
+            <solid android:color="@color/colorAccentLighter"></solid>
         </shape>
     </item>
 </selector>

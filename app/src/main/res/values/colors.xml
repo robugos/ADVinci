@@ -24,6 +24,7 @@
     <color name="colorPrimaryLight">#968EC9</color>
     <color name="colorAccent">#379B91</color>
     <color name="colorAccentLight">#00D6BE</color>
+    <color name="colorAccentLighter">#90EEDD</color>
     <color name="colorAccentDark">#379B91</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorSecondaryText">#ffffff</color>
