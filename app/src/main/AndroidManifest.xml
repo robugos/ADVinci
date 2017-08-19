@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+
     <application
         android:name=".dominio.AppController"
         android:allowBackup="true"
@@ -28,38 +29,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".gui.CreateUserActivity">
+        <activity android:name=".gui.CreateUserActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.LoginActivity" />
         </activity>
-        <activity
-            android:name=".gui.ForgotPassActivity">
+        <activity android:name=".gui.ForgotPassActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".gui.LoginActivity" />
-        </activity>
-        <activity
-            android:name=".gui.ListaEventosActivity"
-            android:label="@string/title_listaeventos">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.MainActivity" />
         </activity>
         <activity
             android:name=".gui.EventoActivity"
             android:label="@string/title_evento">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.ListaEventosActivity" />
-        </activity>
-        <activity
-            android:name=".gui.ListaInteressesActivity"
-            android:label="@string/title_activity_interesses">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.MainActivity" />
+                android:value=".gui.ProgramacaoActivity" />
         </activity>
         <activity
             android:name=".gui.SplashScreen"
@@ -67,10 +52,17 @@
         <activity
             android:name=".gui.ProgramacaoActivity"
             android:label="@string/title_activity_programacao"
-            android:theme="@style/WithoutShadow">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".gui.MainActivity" />
+                android:value="com.robugos.advinci.gui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".gui.ListaInteressesActivity"
+            android:label="@string/title_activity_interesses">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.robugos.advinci.gui.MainActivity" />
         </activity>
     </application>
 

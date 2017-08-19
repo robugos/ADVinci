@@ -22,10 +22,18 @@ public class ListViewAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater = null;
+    private boolean TAG;
 
     public ListViewAdapter(Activity a, ArrayList<HashMap<String, String>> d) {
         activity = a;
         data = d;
+        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public ListViewAdapter(Activity a, ArrayList<HashMap<String, String>> d, boolean x) {
+        activity = a;
+        data = d;
+        TAG = x;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -44,7 +52,11 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if(convertView == null)
-            vi = inflater.inflate(R.layout.listview_lista_evento, null);
+            if(TAG == true){
+                vi = inflater.inflate(R.layout.listview_lista_evento_rec, null);
+            }else{
+                vi = inflater.inflate(R.layout.listview_lista_evento, null);
+            }
 
         TextView nomeEvento = (TextView)vi.findViewById(R.id.nomeEvento);
         TextView dataEvento = (TextView)vi.findViewById(R.id.dataEvento);

@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verProgramacao(View view){
-        //Intent intent = new Intent(this, ListaEventosActivity.class);
         Intent intent = new Intent(this, ProgramacaoActivity.class);
+        intent.putExtra("uid", idUser);
         startActivity(intent);
     }
 

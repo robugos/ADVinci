@@ -36,5 +36,10 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="RatingBarRec" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimaryLight</item>
+    </style>
+
 
 </resources>
