@@ -41,8 +41,9 @@ public class ProgramacaoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programacao);
-        Intent intent = getIntent();
-        userId = intent.getExtras().getString("uid");
+
+        //Intent intent = getIntent();
+        //userId = intent.getExtras().getString("uid");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +63,22 @@ public class ProgramacaoActivity extends AppCompatActivity {
 
     public String getUserId(){
         return this.userId;
+    }
+
+    public void setUserId(String user){
+        this.userId = user;
+    }
+
+    protected void onActivityStart(){
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==1) {
+            if (resultCode == RESULT_OK) {
+                setUserId(data.getExtras().getString("uid"));
+            }
+        }
     }
 
 

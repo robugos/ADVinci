@@ -160,7 +160,8 @@ public class TabProgramacaoRec extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getActivity(), EventoActivity.class);
                     intent.putExtra("id", listaEventos.get(position).get("id"));
-                    startActivity(intent);
+                    intent.putExtra("uid", programacao.getUserId());
+                    startActivityForResult(intent, 1);
                 }
             });
         }

@@ -29,6 +29,7 @@ public class EventoActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private static String url = "http://robugos.com/advinci/db/evento.php?id=";
     private String id;
+    private String userId;
     private Evento evento;
 
     @Override
@@ -38,7 +39,16 @@ public class EventoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getExtras().getString("id");
+        userId = intent.getExtras().getString("uid");
         new GetEvento().execute();
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("uid", userId);
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     //Classe AsyncTask para pegar jSON chamando HTTP

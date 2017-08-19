@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:layout_weight="1"
-        android:textStyle="bold"
-        android:textColor="@color/colorSecondaryText"/>
+        android:textStyle="bold" />
 
     <RatingBar
         android:id="@+id/ratingEvento"
