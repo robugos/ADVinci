@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -85,9 +84,9 @@ public class DocumentParser {
             for (int j = 0; j < tfidfDocsVector.size(); j++) {
             	if (i!=j){
             		String cosine = String.valueOf(new CosineSimilarity().cosineSimilarity(tfidfDocsVector.get(i),tfidfDocsVector.get(j)));
-                    if (!lista.contains((j)+"-"+(i)+";"+cosine)){
+                    if (!lista.contains(cosine+";"+(String.format("%02d", j))+"-"+(String.format("%02d", i)))){
                         //System.out.println((i)+"-"+(j)+";"+cosine);
-                        lista.add((i)+"-"+(j)+";"+cosine);
+                        lista.add(cosine+";"+(String.format("%02d", i))+"-"+(String.format("%02d", j)));
                     }
             	}else {
                 
@@ -99,26 +98,7 @@ public class DocumentParser {
         	System.out.println(z+" - "+lista.get(z));
         }*/
         //System.out.println(lista.toString());
-        orderList(lista);
+        Collections.sort(lista, Collections.reverseOrder());
         return lista;
-    }
-
-    public void orderList(List<String> list){
-        HashMap<String, String> keys = new HashMap<>();
-        HashMap<String, String> values = new HashMap<>();
-        List<String> order = new ArrayList<>();
-        for (int i=0; i<list.size(); i++){
-            String[] par = list.get(i).split(";");
-            keys.put(par[1], par[0]);
-            //values.put(Integer.toString(i), par[1]);
-            order.add(par[1]);
-        }
-        Collections.sort(order, Collections.reverseOrder());
-        lista.clear();
-        for (int j=0; j<order.size(); j++){
-            lista.add(keys.get(order.get(j))+";"+order.get(j));
-            //System.out.println(keys.get(order.get(j))+";"+order.get(j));
-        }
-
     }
 }

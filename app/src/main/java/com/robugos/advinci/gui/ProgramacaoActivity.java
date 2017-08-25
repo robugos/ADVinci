@@ -16,7 +16,9 @@ import com.robugos.advinci.R;
 import com.robugos.advinci.dao.SQLiteHandler;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ProgramacaoActivity extends AppCompatActivity {
 
@@ -86,19 +88,19 @@ public class ProgramacaoActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 //listaEventos.clear();
                 //new GetEventos().execute();
-                return true;
+                return false;
 
             case R.id.action_order_nome:
-                sortListByNome();
-                return true;
+                //sortListByNome();
+                return false;
 
             case R.id.action_order_rating:
                 sortListByRating();
-                return true;
+                return false;
 
             case R.id.action_order_data:
                 sortListByData();
-                return true;
+                return false;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -144,7 +146,7 @@ public class ProgramacaoActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();*/
     }
 
-    private void sortListByNome() {
+    private ArrayList<HashMap<String, String>> sortListByNome(ArrayList<HashMap<String, String>> list) {
         /*Collections.sort(listaEventos, new Comparator<HashMap< String,String >>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
@@ -160,6 +162,7 @@ public class ProgramacaoActivity extends AppCompatActivity {
             }
         });
         adapter.notifyDataSetChanged();*/
+        return null;
     }
 
     public Date stringToDate(String data){
