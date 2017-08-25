@@ -138,7 +138,7 @@ public class TabProgramacaoAll extends Fragment {
         }
     }
 
-    @Override
+    /*@Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible) {
@@ -157,5 +157,5 @@ public class TabProgramacaoAll extends Fragment {
 
         }
 
-    }
+    }*/
 }

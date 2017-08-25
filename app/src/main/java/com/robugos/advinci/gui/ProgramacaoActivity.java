@@ -1,6 +1,5 @@
 package com.robugos.advinci.gui;
 
-import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.robugos.advinci.R;
+import com.robugos.advinci.dao.SQLiteHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +21,7 @@ import java.util.Date;
 public class ProgramacaoActivity extends AppCompatActivity {
 
     private static String userId;
+    private SQLiteHandler db = new SQLiteHandler(this);
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -42,8 +43,7 @@ public class ProgramacaoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programacao);
 
-        //Intent intent = getIntent();
-        //userId = intent.getExtras().getString("uid");
+        userId = db.getUserDetails().get("uid");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,15 +72,6 @@ public class ProgramacaoActivity extends AppCompatActivity {
     protected void onActivityStart(){
 
     }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==1) {
-            if (resultCode == RESULT_OK) {
-                setUserId(data.getExtras().getString("uid"));
-            }
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

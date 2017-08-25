@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("PATH: "+getApplicationInfo().dataDir);
+
         // SqLite database handler
         db = new SQLiteHandler(this);
 
@@ -59,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         //btnProgramacao.setTypeface(typeface);
         //btnHistorico.setTypeface(typeface);
         //btnConfig.setTypeface(typeface);
+    }
+
+    public SessionManager getSession(){
+        return session;
+    }
+
+    public SQLiteHandler getDb(){
+        return db;
     }
 
     @Override
@@ -100,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void verProgramacao(View view){
         Intent intent = new Intent(this, ProgramacaoActivity.class);
-        intent.putExtra("uid", idUser);
         startActivity(intent);
     }
 
@@ -111,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void verInteresses(View view){
         Intent intent = new Intent(this, ListaInteressesActivity.class);
-        intent.putExtra("uid", idUser);
         startActivity(intent);
     }
 

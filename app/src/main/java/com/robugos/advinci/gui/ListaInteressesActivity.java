@@ -1,7 +1,6 @@
 package com.robugos.advinci.gui;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
+import com.robugos.advinci.dao.SQLiteHandler;
 import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.CustomAdapter;
 import com.robugos.advinci.dominio.DataModel;
@@ -39,6 +39,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private static String url = "http://robugos.com/advinci/db/listainteresses.php?uid=";
     private static String userId;
+    private SQLiteHandler db = new SQLiteHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listaInteresses);
         dataModels = new ArrayList<>();
-        Intent intent = getIntent();
-        userId = intent.getExtras().getString("uid");
+        userId = db.getUserDetails().get("uid");
         new GetInteresses().execute();
 
     }
