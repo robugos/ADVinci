@@ -28,7 +28,9 @@
     <color name="colorAccentDark">#379B91</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorSecondaryText">#ffffff</color>
+    <color name="colorMediumText">#696969</color>
     <color name="colorIcon">#FFFFFF</color>
+    <color name="colorList">#EEEEEE</color>
     <color name="colorDivider">#BDBDBD</color>
 
     <color name="color1">#4CAF50</color>
