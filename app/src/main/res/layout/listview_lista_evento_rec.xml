@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/button_color8">
+    android:background="@drawable/button_listview_rec">
 
     <TextView
         android:id="@+id/nomeEvento"
@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:layout_weight="1"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/colorSecondaryText"/>
 
     <RatingBar
         android:id="@+id/ratingEvento"
@@ -37,13 +38,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/colorSecondaryText"/>
 
     <TextView
         android:id="@+id/localEvento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/colorSecondaryText"/>
 
 </LinearLayout>

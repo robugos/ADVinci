@@ -37,8 +37,8 @@
     </style>
 
     <style name="RatingBarRec" parent="Theme.AppCompat">
-        <item name="colorControlNormal">@color/colorPrimaryDark</item>
-        <item name="colorControlActivated">@color/colorPrimaryLight</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorAccentLight</item>
     </style>
 
 

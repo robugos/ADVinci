@@ -5,16 +5,24 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
+import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.Evento;
 import com.robugos.advinci.dominio.ImageLoadTask;
 import com.robugos.advinci.dominio.ResizableImageView;
@@ -22,6 +30,9 @@ import com.robugos.advinci.dominio.ResizableImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventoActivity extends AppCompatActivity {
 
@@ -39,6 +50,82 @@ public class EventoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getExtras().getString("id");
         new GetEvento().execute();
+
+    }
+
+    public void avaliarEvento(View view){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(EventoActivity.this);
+        mBuilder.setTitle(evento.getNome());
+        View mView = getLayoutInflater().inflate(R.layout.alertdialog_avaliar_evento, null);
+        RatingBar notaEventoDialog = (RatingBar) mView.findViewById(R.id.ratingEvento);
+        notaEventoDialog.setRating(Float.parseFloat(evento.getNota()));
+        notaEventoDialog.setContentDescription("Avaliar "+evento.getNome()+" com "+notaEventoDialog.getRating()+" estrelas");
+        Button mAvaliar = (Button) mView.findViewById(R.id.avaliarEvento);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        mAvaliar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tag_string_req = "req_register";
+
+                pDialog.setMessage("Aguarde");
+                showDialog();
+
+                StringRequest strReq = new StringRequest(Request.Method.POST, "http://robugos.com/advinci/db/update.php", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Update Response: " + response.toString());
+                        hideDialog();
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            boolean error = jObj.getBoolean("error");
+                            if (!error) {
+                                Toast.makeText(getApplicationContext(), "Evento avaliado", Toast.LENGTH_LONG).show();
+                            } else {
+                                String errorMsg = jObj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Registration Error: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        hideDialog();
+                    }
+                }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+
+                        Map<String, String> params = new HashMap<String, String>();
+                        //params.put("uid", userId);
+                        //params.put("interesses", getInteresses(dataModels, true).toString());
+                        return params;
+                    }
+
+                };
+
+                AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+            }
+        });
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
     //Classe AsyncTask para pegar jSON chamando HTTP

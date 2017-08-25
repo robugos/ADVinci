@@ -8,6 +8,7 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcon">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>-->
+
     <!--NEWCOLORSOLD-->
     <!--<color name="colorPrimary">#1976d2</color>
     <color name="colorPrimaryDark">#004ba0</color>
@@ -19,6 +20,7 @@
     <color name="colorSecondaryText">#ffffff</color>
     <color name="colorIcon">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>-->
+
     <color name="colorPrimary">#7168B7</color>
     <color name="colorPrimaryDark">#39325E</color>
     <color name="colorPrimaryLight">#968EC9</color>
@@ -33,7 +35,7 @@
     <color name="colorList">#EEEEEE</color>
     <color name="colorDivider">#BDBDBD</color>
 
-    <color name="color1">#4CAF50</color>
+    <!--<color name="color1">#4CAF50</color>
     <color name="color2">#9C27B0</color>
     <color name="color3">#2196F3</color>
     <color name="color4">#FFC107</color>
@@ -42,5 +44,5 @@
     <color name="color2Dark">#6A1B9A</color>
     <color name="color3Dark">#1565C0</color>
     <color name="color4Dark">#FF9100</color>
-    <color name="color5Dark">#880E4F</color>
+    <color name="color5Dark">#880E4F</color>-->
 </resources>

@@ -60,20 +60,39 @@
                 android:layout_weight="1"
                 android:textSize="16sp" />
 
-            <RatingBar
-                android:id="@+id/ratingEvento"
-                style="@style/Widget.AppCompat.RatingBar.Indicator"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_weight="1"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:rating="0"
-                android:paddingBottom="12dp"
-                android:paddingTop="4dp"
-                android:stepSize="10.5" />
+                android:orientation="horizontal">
+
+                <RatingBar
+                    android:id="@+id/ratingEvento"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="0"
+                    android:stepSize="0.5" />
+
+                <Button
+                    android:id="@+id/avaliarEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    style="?android:textAppearanceSmall"
+                    android:background="@drawable/button_advinci"
+                    android:text="Avaliar"
+                    android:textColor="@color/colorIcon"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textStyle="bold"
+                    android:onClick="avaliarEvento"/>
+            </LinearLayout >
 
             <WebView
                 android:id="@+id/descricaoEvento"

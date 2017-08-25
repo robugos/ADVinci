@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void verAjustes(View view){
+    }
+
     public void verInteresses(View view){
         Intent intent = new Intent(this, ListaInteressesActivity.class);
         startActivity(intent);
