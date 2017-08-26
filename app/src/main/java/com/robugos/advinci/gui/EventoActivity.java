@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
+import com.robugos.advinci.dao.SQLiteHandler;
 import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.Evento;
 import com.robugos.advinci.dominio.ImageLoadTask;
@@ -38,15 +39,19 @@ public class EventoActivity extends AppCompatActivity {
 
     private static final String TAG = "EventoActivity";
     private ProgressDialog pDialog;
-    private static String url = "http://robugos.com/advinci/db/evento.php?id=";
+    private static String url = "http://robugos.com/advinci/db/evento.php";
     private String id;
     private Evento evento;
+    private static String userId;
+    private static String notauser;
+    private SQLiteHandler db = new SQLiteHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento);
 
+        userId = db.getUserDetails().get("uid");
         Intent intent = getIntent();
         id = intent.getExtras().getString("id");
         new GetEvento().execute();
@@ -55,11 +60,13 @@ public class EventoActivity extends AppCompatActivity {
 
     public void avaliarEvento(View view){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(EventoActivity.this);
-        mBuilder.setTitle(evento.getNome());
         View mView = getLayoutInflater().inflate(R.layout.alertdialog_avaliar_evento, null);
-        RatingBar notaEventoDialog = (RatingBar) mView.findViewById(R.id.ratingEvento);
-        notaEventoDialog.setRating(Float.parseFloat(evento.getNota()));
-        notaEventoDialog.setContentDescription("Avaliar "+evento.getNome()+" com "+notaEventoDialog.getRating()+" estrelas");
+        final RatingBar notaEventoDialog = (RatingBar) mView.findViewById(R.id.ratingEvento);
+        if (notauser!="0"){
+            notaEventoDialog.setRating(Integer.parseInt(notauser));
+        }else{
+            notaEventoDialog.setRating(Float.parseFloat(evento.getNota()));
+        }
         Button mAvaliar = (Button) mView.findViewById(R.id.avaliarEvento);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
@@ -82,6 +89,8 @@ public class EventoActivity extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
                             if (!error) {
+                                dialog.dismiss();
+                                new GetEvento().execute();
                                 Toast.makeText(getApplicationContext(), "Evento avaliado", Toast.LENGTH_LONG).show();
                             } else {
                                 String errorMsg = jObj.getString("error_msg");
@@ -106,8 +115,9 @@ public class EventoActivity extends AppCompatActivity {
                     protected Map<String, String> getParams() {
 
                         Map<String, String> params = new HashMap<String, String>();
-                        //params.put("uid", userId);
-                        //params.put("interesses", getInteresses(dataModels, true).toString());
+                        params.put("id", userId);
+                        params.put("evento", evento.getId());
+                        params.put("nota", String.valueOf(notaEventoDialog.getRating()));
                         return params;
                     }
 
@@ -144,7 +154,7 @@ public class EventoActivity extends AppCompatActivity {
         protected Void doInBackground(Void... arg0){
             HttpHandler sh = new HttpHandler();
             // Faz request a URL e pega a resposta
-            String jsonStr = sh.chamaServico(url+id);
+            String jsonStr = sh.chamaServico(url+"?id="+id+"&uid="+userId);
             Log.e(TAG, "Respotas da URL: " + jsonStr);
             if (jsonStr != null){
                 try {
@@ -153,6 +163,8 @@ public class EventoActivity extends AppCompatActivity {
                     JSONArray e = jsonObj.getJSONArray("evento");
 
                         JSONObject eve = e.getJSONObject(0);
+                    notauser = eve.getString("notauser");
+                    //System.out.println("nota user: "+notauser);
                     String data = eve.getString("data");
                     data = (data.substring(8, 10))+"/"+(data.substring(5, 7))+
                             "/"+(data.substring(0, 4))+" às "+(data.substring(11, 13))+"h"+(data.substring(14, 16));
@@ -202,7 +214,7 @@ public class EventoActivity extends AppCompatActivity {
             localEventoText.setText(evento.getLocal());
             dataEventoText.setText(evento.getData());
             descricaoEventoText.loadData("<style>html,body{margin:0; color:#737373;}</style><div style=\"text-align: justify;\n\">"+evento.getDescricao()+"</div>", "text/html; charset=utf-8", "utf-8");
-            System.out.println(evento.getNota());
+            //System.out.println(evento.getNota());
             notaEventoBar.setRating(Float.parseFloat(evento.getNota()));
             notaEventoBar.setContentDescription(evento.getNome()+" avaliado em: "+evento.getNota()+" estrelas");
             String url = evento.getUrlimg();

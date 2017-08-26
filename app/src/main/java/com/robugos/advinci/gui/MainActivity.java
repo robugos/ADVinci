@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Dosis-Bold.ttf");
 
         Button btnPerfil = (Button) findViewById(R.id.button_perfil);
-        //Button btnProgramacao = (Button) findViewById(R.id.button_programacao);
-        //Button btnHistorico = (Button) findViewById(R.id.button_historico);
-        //Button btnConfig = (Button) findViewById(R.id.button_config);
+        Button btnProgramacao = (Button) findViewById(R.id.button_programacao);
+        Button btnHistorico = (Button) findViewById(R.id.button_historico);
+        Button btnConfig = (Button) findViewById(R.id.button_config);
 
         btnPerfil.setTypeface(typeface);
-        //btnProgramacao.setTypeface(typeface);
-        //btnHistorico.setTypeface(typeface);
-        //btnConfig.setTypeface(typeface);
+        btnProgramacao.setTypeface(typeface);
+        btnHistorico.setTypeface(typeface);
+        btnConfig.setTypeface(typeface);
     }
 
     public SessionManager getSession(){

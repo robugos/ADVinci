@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,6 +92,12 @@ public class TabProgramacaoRec extends Fragment {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add(0, v.getId(), 0, "Avaliar");
+        super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     //Classe AsyncTask para pegar jSON chamando HTTP
@@ -198,6 +205,7 @@ public class TabProgramacaoRec extends Fragment {
             adapter = new ListViewAdapter(getActivity(), listaEventos, true);
             adapter.notifyDataSetChanged();
             lView.setAdapter(adapter);
+            registerForContextMenu(lView);
             lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getActivity(), EventoActivity.class);
@@ -205,6 +213,16 @@ public class TabProgramacaoRec extends Fragment {
                     startActivityForResult(intent, 1);
                 }
             });
+
+            /*lView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getActivity().getApplicationContext(),listaEventos.get(position).get("id"), Toast.LENGTH_LONG).show();
+                    Log.v("long clicked","pos: " + position);
+
+                    return true;
+                }
+            });*/
         }
     }
     @Override

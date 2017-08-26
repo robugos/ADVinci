@@ -54,7 +54,7 @@ public class ListViewAdapter extends BaseAdapter {
         if(convertView == null)
             if(TAG == true){
                 vi = inflater.inflate(R.layout.listview_lista_evento_rec, null);
-            }else{
+            }else {
                 vi = inflater.inflate(R.layout.listview_lista_evento, null);
             }
 

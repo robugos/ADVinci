@@ -12,7 +12,7 @@
         android:id="@+id/listaEventos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/colorAccentDark"
+        android:divider="@color/colorPrimaryText"
         android:paddingBottom="50dp"
         android:dividerHeight="1px"/>
 
