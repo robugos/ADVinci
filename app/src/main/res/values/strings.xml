@@ -23,7 +23,9 @@
     <string name="action_recover_password">Esqueci minha senha</string>
     <string name="title_listaeventos">Programação</string>
     <string name="title_evento">Evento</string>
-    <string name="title_activity_interesses">Interesses</string>
+    <string name="title_activity_interesses">Editar interesses</string>
+    <string name="title_activity_perfil">Perfil</string>
+    <string name="title_activity_historico">Histórico</string>
 
     <!-- Strings related to Settings -->
 

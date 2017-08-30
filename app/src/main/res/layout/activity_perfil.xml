@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.robugos.advinci.gui.MainActivity">
+    tools:context="com.robugos.advinci.gui.PerfilActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,84 +13,70 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/button_perfil"
+            android:id="@+id/button_nome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingLeft="50dp"
             android:gravity="center_vertical|left"
             android:background="@drawable/button_main"
-            android:drawableLeft="@mipmap/ic_perfil"
+            android:drawableLeft="@mipmap/ic_edit"
             android:drawablePadding="30dp"
             android:stateListAnimator="@null"
-            android:text="PERFIL"
-            android:textSize="24sp"
+            android:text="Editar nome"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:onClick="verPerfil"
-            android:contentDescription="Perfil: Exibe o perfil do usuário" />
+            android:onClick="editarNome"
+            android:contentDescription="Editar nome de exibição" />
 
         <Button
-            android:id="@+id/button_programacao"
+            android:id="@+id/button_local"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingLeft="50dp"
             android:gravity="center_vertical|left"
             android:background="@drawable/button_main"
-            android:drawableLeft="@mipmap/ic_programacao"
+            android:drawableLeft="@mipmap/ic_local"
             android:drawablePadding="30dp"
             android:stateListAnimator="@null"
-            android:text="PROGRAMAÇÃO"
-            android:textSize="24sp"
+            android:text="Editar local"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:onClick="verProgramacao"
-            android:contentDescription="Programação: Exibe a lista de eventos da programação"/>
+            android:contentDescription="Editar local de exibição"/>
 
         <Button
-            android:id="@+id/button_historico"
+            android:id="@+id/button_senha"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingLeft="50dp"
             android:gravity="center_vertical|left"
             android:background="@drawable/button_main"
-            android:drawableLeft="@mipmap/ic_historico"
+            android:drawableLeft="@mipmap/ic_lock"
             android:drawablePadding="30dp"
             android:stateListAnimator="@null"
-            android:text="HISTÓRICO"
-            android:textSize="24sp"
+            android:text="Alterar senha"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:onClick="verHistorico"
-            android:contentDescription="Histórico: Exibe a lista com o histórico de eventos participados"/>
+            android:contentDescription="Alterar senha de acesso"/>
 
         <Button
-            android:id="@+id/button_config"
+            android:id="@+id/button_interesses"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingLeft="50dp"
             android:gravity="center_vertical|left"
             android:background="@drawable/button_main"
-            android:drawableLeft="@mipmap/ic_ajustes"
+            android:drawableLeft="@mipmap/ic_love"
             android:drawablePadding="30dp"
             android:stateListAnimator="@null"
-            android:text="AJUSTES"
-            android:textSize="24sp"
+            android:text="Editar interesses"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:onClick="verSplash"
-            android:contentDescription="Ajustes: Exibe a lista de itens ajustáveis do aplicativo" />
+            android:onClick="editarInteresses"
+            android:contentDescription="Editar lista de interesses" />
 
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
 </LinearLayout>

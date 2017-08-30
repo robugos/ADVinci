@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+    HashMap<String, String> user = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
 
         db = new SQLiteHandler(getApplicationContext());
+        user = db.getUserDetails();
         session = new SessionManager(this);
 
         if (session.isLoggedIn()) {
+            checkLogin();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -94,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //loginButton.setEnabled(false);
 
-        pDialog = new ProgressDialog(LoginActivity.this);
+//        pDialog = new ProgressDialog(LoginActivity.this);
         pDialog.setMessage("Aguarde");
         pDialog.setCancelable(false);
         pDialog.show();
@@ -104,6 +107,65 @@ public class LoginActivity extends AppCompatActivity {
         Usuario usuario = new Usuario(email, senha);
         Usuario user = usuario;
         checkLogin(user);
+    }
+
+    private void checkLogin(){
+        String tag_string_req = "req_login";
+        StringRequest strReq = new StringRequest(Method.POST,
+                "http://robugos.com/advinci/db/login.php", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    if (!error) {
+                        session.setLogin(true);
+                        String uid = jObj.getString("uid");
+
+                        JSONObject user = jObj.getJSONObject("usuario");
+                        String nome = user.getString("nome");
+                        String sobrenome = user.getString("sobrenome");
+
+                        db.updateUser(uid, nome, sobrenome);
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                System.out.println("userid: "+user.get("uid"));
+                params.put("uid", user.get("uid"));
+
+                return params;
+            }
+
+        };
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void checkLogin(Usuario user){

@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListaInteressesActivity extends AppCompatActivity {
+public class EditarInteressesActivity extends AppCompatActivity {
 
     ArrayList<DataModel> dataModels;
     ListView listView;
     private CustomAdapter adapter;
-    private String TAG = ListaInteressesActivity.class.getSimpleName();
+    private String TAG = EditarInteressesActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private static String url = "http://robugos.com/advinci/db/listainteresses.php?uid=";
     private static String userId;
@@ -59,7 +59,7 @@ public class ListaInteressesActivity extends AppCompatActivity {
         protected void onPreExecute(){
             super.onPreExecute();
             //Mostra dialog de progresso
-            pDialog = new ProgressDialog(ListaInteressesActivity.this);
+            pDialog = new ProgressDialog(EditarInteressesActivity.this);
             pDialog.setMessage("Aguarde");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -157,7 +157,6 @@ public class ListaInteressesActivity extends AppCompatActivity {
                     }else
                         dataModel.setStatus(false);
                     adapter.notifyDataSetChanged();
-                    //Toast.makeText(ListaInteressesActivity.this, getInteresses(dataModels, true).toString(), Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -177,9 +176,8 @@ public class ListaInteressesActivity extends AppCompatActivity {
 
     public void saveInteresses(View view){
         if (getInteresses(dataModels, true).isEmpty()){
-            Toast.makeText(ListaInteressesActivity.this, "Selecione pelo menos um interesse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Selecione pelo menos um interesse", Toast.LENGTH_SHORT).show();
         }else{
-            //Toast.makeText(ListaInteressesActivity.this, getInteresses(dataModels, true).toString(), Toast.LENGTH_SHORT).show();
             String tag_string_req = "req_register";
 
             pDialog.setMessage("Aguarde");

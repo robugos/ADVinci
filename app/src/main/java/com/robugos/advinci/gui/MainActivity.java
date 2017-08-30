@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> user = db.getUserDetails();
 
         final String nome = user.get("nome");
-        final String email = user.get("email");
         idUser = user.get("uid");
         /*TextView perfilText = (TextView) findViewById(R.id.welcome_user);
         perfilText.setText(mensagemBoasVindas()+", "+nome+"!");*/
@@ -121,8 +120,13 @@ public class MainActivity extends AppCompatActivity {
     public void verAjustes(View view){
     }
 
-    public void verInteresses(View view){
-        Intent intent = new Intent(this, ListaInteressesActivity.class);
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, PerfilActivity.class);
+        startActivity(intent);
+    }
+
+    public void verHistorico(View view){
+        Intent intent = new Intent(this, HistoricoActivity.class);
         startActivity(intent);
     }
 

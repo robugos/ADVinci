@@ -51,12 +51,13 @@ public class ListViewAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if(convertView == null)
-            if(TAG == true){
+        if(convertView == null) {
+            if (TAG == true) {
                 vi = inflater.inflate(R.layout.listview_lista_evento_rec, null);
-            }else {
+            } else {
                 vi = inflater.inflate(R.layout.listview_lista_evento, null);
             }
+        }
 
         TextView nomeEvento = (TextView)vi.findViewById(R.id.nomeEvento);
         TextView dataEvento = (TextView)vi.findViewById(R.id.dataEvento);

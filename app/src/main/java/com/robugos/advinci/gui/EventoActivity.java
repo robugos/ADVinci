@@ -62,10 +62,10 @@ public class EventoActivity extends AppCompatActivity {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(EventoActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.alertdialog_avaliar_evento, null);
         final RatingBar notaEventoDialog = (RatingBar) mView.findViewById(R.id.ratingEvento);
-        if (notauser!="0"){
-            notaEventoDialog.setRating(Integer.parseInt(notauser));
-        }else{
+        if (notauser==null || notauser.equals("null")){
             notaEventoDialog.setRating(Float.parseFloat(evento.getNota()));
+        }else{
+            notaEventoDialog.setRating(Float.parseFloat(notauser));
         }
         Button mAvaliar = (Button) mView.findViewById(R.id.avaliarEvento);
         mBuilder.setView(mView);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -13,11 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
+import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.ListViewAdapter;
 import com.robugos.advinci.dominio.tfidf.TfIdfMain;
 
@@ -32,6 +40,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabProgramacaoRec extends Fragment {
     ArrayList<HashMap<String, String>> listaEventos;
@@ -45,6 +54,7 @@ public class TabProgramacaoRec extends Fragment {
     TfIdfMain tfidf = new TfIdfMain();
     List<String> interesses = new ArrayList<>();
     List<String> savedfiles = new ArrayList<>();
+    private static String notauser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +111,7 @@ public class TabProgramacaoRec extends Fragment {
     }
 
     //Classe AsyncTask para pegar jSON chamando HTTP
-    private class GetEventos extends AsyncTask<Void, Void, Void> {
+    class GetEventos extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -140,6 +150,7 @@ public class TabProgramacaoRec extends Fragment {
                         String adimg = eve.getString("adimg");
                         String categoria = eve.getString("categoria");
                         String peso = eve.getString("peso");
+                        notauser = eve.getString("notauser");
                         //System.out.println("Categoria JSON: "+categoria);
                         String nota = eve.getString("nota");
 
@@ -239,6 +250,77 @@ public class TabProgramacaoRec extends Fragment {
 
     }
 
+    public void avaliarEvento(final int position){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        View mView = getActivity().getLayoutInflater().inflate(R.layout.alertdialog_avaliar_evento, null);
+        final RatingBar notaEventoDialog = (RatingBar) mView.findViewById(R.id.ratingEvento);
+        if (notauser==null || notauser.equals("null")){
+            System.out.println("position :"+position);
+            notaEventoDialog.setRating(Float.parseFloat(listaEventos.get(position).get("nota")));
+        }else{
+            notaEventoDialog.setRating(Float.parseFloat(notauser));
+        }
+        Button mAvaliar = (Button) mView.findViewById(R.id.avaliarEvento);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        mAvaliar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tag_string_req = "req_register";
+
+                pDialog.setMessage("Aguarde");
+                showDialog();
+
+                StringRequest strReq = new StringRequest(Request.Method.POST, "http://robugos.com/advinci/db/update.php", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Update Response: " + response.toString());
+                        hideDialog();
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            boolean error = jObj.getBoolean("error");
+                            if (!error) {
+                                dialog.dismiss();
+                                new GetEventos().execute();
+                                Toast.makeText(getActivity().getApplicationContext(), "Evento avaliado", Toast.LENGTH_LONG).show();
+                            } else {
+                                String errorMsg = jObj.getString("error_msg");
+                                Toast.makeText(getActivity().getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Registration Error: " + error.getMessage());
+                        Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        hideDialog();
+                    }
+                }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("id", programacao.getUserId());
+                        params.put("evento", listaEventos.get(position).get("id"));
+                        params.put("nota", String.valueOf(notaEventoDialog.getRating()));
+                        return params;
+                    }
+
+                };
+
+                AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+            }
+        });
+    }
+
     private List<String> stringToList(String valores){
         List<String> list;
         valores = valores.substring(1, valores.length()-1).replaceAll(" ","");
@@ -317,6 +399,16 @@ public class TabProgramacaoRec extends Fragment {
             }
         });
         return list;
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
     /*private void saveArrayList() {
