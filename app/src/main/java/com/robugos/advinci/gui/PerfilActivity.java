@@ -61,8 +61,10 @@ public class PerfilActivity extends AppCompatActivity {
         View mView = getLayoutInflater().inflate(R.layout.alertdialog_editar_nome, null);
         final TextView nomeDialog = (TextView) mView.findViewById(R.id.nomeUsuario);
         nomeDialog.setText(db.getUserDetails().get("nome"));
+        nomeDialog.setContentDescription("Nome: "+nomeDialog.getText());
         final TextView sobrenomeDialog = (TextView) mView.findViewById(R.id.sobrenomeUsuario);
         sobrenomeDialog.setText(db.getUserDetails().get("sobrenome"));
+        sobrenomeDialog.setContentDescription("Sobrenome: "+sobrenomeDialog.getText());
         final List<TextView> usuario = new ArrayList<>();
         usuario.add(nomeDialog);
         usuario.add(sobrenomeDialog);
@@ -71,7 +73,12 @@ public class PerfilActivity extends AppCompatActivity {
         mBuilder.setView(mView);
         dialog = mBuilder.create();
         dialog.show();
-        updateNome(mEditar, usuario);
+        mEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateNome(mEditar, usuario);
+            }
+        });
     }
 
     public void alterarSenha(View view){
@@ -88,7 +95,12 @@ public class PerfilActivity extends AppCompatActivity {
         mBuilder.setView(mView);
         dialog = mBuilder.create();
         dialog.show();
-        changeSenha(mAlterar, usuario);
+        mAlterar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeSenha(mAlterar, usuario);
+            }
+        });
     }
 
     public void updateNome(Button mEditar, final List<TextView> usuario) {
@@ -199,8 +211,8 @@ public class PerfilActivity extends AppCompatActivity {
 
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("uid", userId);
-                    params.put("nome", usuario.get(0).getText().toString());
-                    params.put("sobrenome", usuario.get(1).getText().toString());
+                    params.put("senha", usuario.get(0).getText().toString());
+                    params.put("novasenha", usuario.get(1).getText().toString());
                     return params;
                 }
 

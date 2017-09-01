@@ -28,7 +28,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="verPerfil"
-            android:contentDescription="Perfil: Exibe o perfil do usuário" />
+            android:contentDescription="Ícone de pessoa: perfil" />
 
         <Button
             android:id="@+id/button_programacao"
@@ -46,7 +46,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="verProgramacao"
-            android:contentDescription="Programação: Exibe a lista de eventos da programação"/>
+            android:contentDescription="Ícone de calendário: programação"/>
 
         <Button
             android:id="@+id/button_historico"
@@ -64,7 +64,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="verHistorico"
-            android:contentDescription="Histórico: Exibe a lista com o histórico de eventos participados"/>
+            android:contentDescription="Ícone de lista: histórico"/>
 
         <Button
             android:id="@+id/button_config"
@@ -82,7 +82,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="verSplash"
-            android:contentDescription="Ajustes: Exibe a lista de itens ajustáveis do aplicativo" />
+            android:contentDescription="Ícone de engrenagem: ajustes" />
 
     </LinearLayout>
 

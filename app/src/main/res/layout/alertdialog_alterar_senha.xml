@@ -20,6 +20,7 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:contentDescription="Senha atual"
             android:nextFocusDown="@+id/senhaNova"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -36,6 +37,7 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:contentDescription="Nova senha"
             android:nextFocusDown="@+id/confirmaSenha"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -52,6 +54,7 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:contentDescription="Confirmar senha"
             android:nextFocusDown="@+id/salvarSenha"/>
 
     </android.support.design.widget.TextInputLayout>

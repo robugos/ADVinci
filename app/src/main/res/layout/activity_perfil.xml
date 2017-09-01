@@ -27,7 +27,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="editarNome"
-            android:contentDescription="Editar nome de exibição" />
+            android:contentDescription="Ícone de lápis: editar nome" />
 
         <Button
             android:id="@+id/button_local"
@@ -43,7 +43,7 @@
             android:text="Editar local"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:contentDescription="Editar local de exibição"/>
+            android:contentDescription="Ícone de GPS: editar local"/>
 
         <Button
             android:id="@+id/button_senha"
@@ -59,7 +59,8 @@
             android:text="Alterar senha"
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
-            android:contentDescription="Alterar senha de acesso"/>
+            android:onClick="alterarSenha"
+            android:contentDescription="Ícone de cadeado: alterar senha"/>
 
         <Button
             android:id="@+id/button_interesses"
@@ -76,7 +77,7 @@
             android:textColor="@color/colorIcon"
             android:textStyle="bold"
             android:onClick="editarInteresses"
-            android:contentDescription="Editar lista de interesses" />
+            android:contentDescription="Ícone de coração: editar interesses" />
 
     </LinearLayout>
 </LinearLayout>

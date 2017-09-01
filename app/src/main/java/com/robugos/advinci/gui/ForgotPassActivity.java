@@ -6,12 +6,24 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.robugos.advinci.R;
+import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.Usuario;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ForgotPassActivity extends AppCompatActivity {
@@ -26,74 +38,92 @@ public class ForgotPassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgotpass);
 
-        /*ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);*/
         final TextView emailText = (TextView) findViewById(R.id.email);
         final Button recoverButton = (Button) findViewById(R.id.email_recover_button);
+
+        recoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recuperar(recoverButton, emailText);
+            }
+        });
     }
 
-    public void login(final Button recoverButton, TextView emailText){
+    public void recuperar(final Button recoverButton, TextView emailText){
         Log.d(TAG, "Recuperar");
 
         if (!validate(recoverButton, emailText)){
-            onLoginFailed(recoverButton);
             return;
         }
 
-        recoverButton.setEnabled(false);
-
-        /*final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Autenticando");
-        progressDialog.show();*/
         pDialog = new ProgressDialog(ForgotPassActivity.this);
         pDialog.setMessage("Aguarde");
         pDialog.setCancelable(false);
         pDialog.show();
 
-        //AUTENTICACAO
-
         String email = emailText.getText().toString();
+        recuperarSenha(email);
 
-        //user.setEmail(email);
-        //user.setSenha(senha);
-        /*LoginActivity.AsyncT asyncT = new LoginActivity.AsyncT();
-        asyncT.execute();*/
+    }
 
-        new android.os.Handler().postDelayed(
-                new Runnable(){
-                    public void run(){
-                        onLoginSuccess(recoverButton);
-                        pDialog.dismiss();
+    private void recuperarSenha(final String email){
+        String tag_string_req = "req_login";
+
+        pDialog.setMessage("Aguarde");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                "http://robugos.com/advinci/db/mail.php", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    if (!error) {
+                        Toast.makeText(getApplicationContext(), "Email de recuperação enviado", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ForgotPassActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                     }
-                }, 300);
-    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == REQUEST_SIGNUP){
-            if (resultCode == RESULT_OK){
-                //SUCCESFUL SINGUP
-                this.finish();
             }
-        }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+
+                return params;
+            }
+
+        };
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    /*@Override
-    public void onBackPressed(){
-        moveTaskToBack(true);
-    }*/
-
-    public void onLoginSuccess(Button recoverButton){
-        recoverButton.setEnabled(true);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void onLoginFailed(Button recoverButton){
-        //Toast.makeText(getBaseContext(), "Login falhou", Toast.LENGTH_LONG).show();
-        recoverButton.setEnabled(true);
+    public void onLoginFailed(Button loginButton){
+        loginButton.setEnabled(true);
     }
 
     public boolean validate(Button recoverButton, TextView emailText){
@@ -111,15 +141,14 @@ public class ForgotPassActivity extends AppCompatActivity {
         return valid;
     }
 
-    public Usuario getUser(){
-        return user;
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
-
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
 

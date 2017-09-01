@@ -19,6 +19,7 @@
             android:hint="@string/nome_usuario"
             android:inputType="textPersonName"
             android:imeOptions="actionNext"
+            android:contentDescription="Nome"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
@@ -34,6 +35,7 @@
             android:hint="@string/sobrenome_usuario"
             android:inputType="textPersonName"
             android:imeOptions="actionNext"
+            android:contentDescription="Sobrenome"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
@@ -50,6 +52,5 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
-        android:onClick="editarNome"
         android:textStyle="bold" />
 </LinearLayout>

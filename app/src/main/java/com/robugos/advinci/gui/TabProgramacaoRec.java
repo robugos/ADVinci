@@ -1,6 +1,7 @@
 package com.robugos.advinci.gui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +28,6 @@ import com.robugos.advinci.R;
 import com.robugos.advinci.dao.HttpHandler;
 import com.robugos.advinci.dominio.AppController;
 import com.robugos.advinci.dominio.ListViewAdapter;
-import com.robugos.advinci.dominio.tfidf.TfIdfMain;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,9 +51,7 @@ public class TabProgramacaoRec extends Fragment {
     private GetEventos loader = new GetEventos();
     ListViewAdapter adapter;
     ProgramacaoActivity programacao = new ProgramacaoActivity();
-    TfIdfMain tfidf = new TfIdfMain();
     List<String> interesses = new ArrayList<>();
-    List<String> savedfiles = new ArrayList<>();
     private static String notauser;
 
     @Override
@@ -175,14 +173,42 @@ public class TabProgramacaoRec extends Fragment {
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "Erro do JSON parsing: " + e.getMessage());
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity().getApplicationContext(),
-                                    "Erro: " + e.getMessage(), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
+                    if (e.getMessage().equals("No value for userinteresses")) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog dialog;
+                                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                                mBuilder.setIcon(android.R.drawable.ic_dialog_alert);
+                                mBuilder.setTitle("Editar interesses");
+                                mBuilder.setMessage("Você ainda não possui nenhum interesse selecionado. Deseja editar a lista de interesses para filtrar os resultados?");
+                                mBuilder.setIcon(0);
+                                mBuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(getActivity(), EditarInteressesActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+
+                                });
+                                mBuilder.setNegativeButton("Não", null);
+                                dialog = mBuilder.create();
+                                dialog.show();
+
+                            }
+                        });
+                    }else{
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        "Erro: " + e.getMessage(), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
+                    }
                 }
             } else {
                 Log.e(TAG, "Sem conexão");
@@ -204,36 +230,18 @@ public class TabProgramacaoRec extends Fragment {
             super.onPostExecute(result);
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            /*saveArrayList();
-            try {
-                tfidf.calculaRecomendacao(getActivity().getApplicationInfo().dataDir+"/files", savedfiles);
-                System.out.println("depois do try: "+tfidf.getLista().toString());
-                listaEventos = listaToEvento(tfidf.getLista());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
             listaEventos = sortListByPeso(listaEventos);
             adapter = new ListViewAdapter(getActivity(), listaEventos, true);
             adapter.notifyDataSetChanged();
             lView.setAdapter(adapter);
             registerForContextMenu(lView);
             lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(), EventoActivity.class);
-                    intent.putExtra("id", listaEventos.get(position).get("id"));
-                    startActivityForResult(intent, 1);
-                }
-            });
-
-            /*lView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getActivity().getApplicationContext(),listaEventos.get(position).get("id"), Toast.LENGTH_LONG).show();
-                    Log.v("long clicked","pos: " + position);
-
-                    return true;
-                }
-            });*/
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getActivity(), EventoActivity.class);
+                        intent.putExtra("id", listaEventos.get(position).get("id"));
+                        startActivityForResult(intent, 1);
+                    }
+                });
         }
     }
     @Override
@@ -410,53 +418,4 @@ public class TabProgramacaoRec extends Fragment {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
-
-    /*private void saveArrayList() {
-        for (int i = 0; i < listaEventos.size(); i++) {
-
-            try {
-                FileOutputStream fileOutputStream = getActivity().openFileOutput(String.format("%02d", Integer.parseInt(listaEventos.get(i).get("id")))+"-evento"+String.format("%02d", i)+".txt", getActivity().MODE_PRIVATE);
-                ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
-                //System.out.println(arrayList.get(i).get("id")+"\n"+arrayList.get(i).get("nome")+"\n"+arrayList.get(i).get("descricao"));
-                out.writeObject(listaEventos.get(i).get("descricao"));
-                out.close();
-                fileOutputStream.close();
-                savedfiles.add(String.format("%02d", Integer.parseInt(listaEventos.get(i).get("id")))+"-evento"+String.format("%02d", i)+".txt");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            for (int j=0; j<savedfiles.size(); j++){
-                String ret = "";
-
-                try {
-                    InputStream inputStream = getActivity().openFileInput(savedfiles.get(i));
-
-                    if ( inputStream != null ) {
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        String receiveString = "";
-                        StringBuilder stringBuilder = new StringBuilder();
-
-                        while ( (receiveString = bufferedReader.readLine()) != null ) {
-                            stringBuilder.append(receiveString);
-                        }
-
-                        inputStream.close();
-                        ret = stringBuilder.toString();
-                    }
-                }
-                catch (FileNotFoundException e) {
-                    Log.e("login activity", "File not found: " + e.toString());
-                } catch (IOException e) {
-                    Log.e("login activity", "Can not read file: " + e.toString());
-                }
-
-                //System.out.println("ANTES DE LER, SALVANDO: "+ret);
-            }
-        }
-    }*/
-
-
 }
